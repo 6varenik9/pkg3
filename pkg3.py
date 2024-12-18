@@ -123,12 +123,7 @@ class ImageProcessingApp(QMainWindow):
             elif method == "Adaptive Thresholding":
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 self.processed_image = cv2.adaptiveThreshold(
-                    gray,
-                    255,
-                    cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
-                    cv2.THRESH_BINARY,
-                    11,  
-                    threshold  
+                    gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, threshold  
                 )
             elif method == "Edge Detection":
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
