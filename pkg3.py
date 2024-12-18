@@ -18,18 +18,15 @@ class ImageProcessingApp(QMainWindow):
 
         self.original_image = None
         self.processed_image = None
-
-        # Main layout
+        
         self.main_widget = QWidget()
         self.setCentralWidget(self.main_widget)
         self.layout = QVBoxLayout()
         self.main_widget.setLayout(self.layout)
-
-        # Image display layout
+        
         self.images_layout = QHBoxLayout()
         self.layout.addLayout(self.images_layout)
-
-        # Original Image Display (with frame)
+        
         self.original_frame = QFrame()
         self.original_frame.setFrameShape(QFrame.Box)
         self.original_frame.setLineWidth(2)
@@ -40,7 +37,7 @@ class ImageProcessingApp(QMainWindow):
         self.original_frame.setLayout(original_layout)
         self.images_layout.addWidget(self.original_frame)
 
-        # Processed Image Display (with frame)
+        
         self.processed_frame = QFrame()
         self.processed_frame.setFrameShape(QFrame.Box)
         self.processed_frame.setLineWidth(2)
@@ -51,7 +48,6 @@ class ImageProcessingApp(QMainWindow):
         self.processed_frame.setLayout(processed_layout)
         self.images_layout.addWidget(self.processed_frame)
 
-        # Controls layout (buttons at the bottom)
         self.controls_layout = QHBoxLayout()
         self.layout.addLayout(self.controls_layout)
 
@@ -85,8 +81,8 @@ class ImageProcessingApp(QMainWindow):
             file_name, _ = QFileDialog.getOpenFileName(self, "Open Image File", "", "Images (*.png *.jpg *.bmp)")
             if file_name:
                 pil_image = Image.open(file_name)
-                self.original_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR)  # Конвертация в OpenCV
-                self.processed_image = None  # Сбрасываем обработанное изображение
+                self.original_image = cv2.cvtColor(np.array(pil_image), cv2.COLOR_RGB2BGR) 
+                self.processed_image = None  
                 self.display_image(self.original_image, self.original_image_label)
                 self.processed_image_label.clear()
         except Exception as e:
@@ -94,11 +90,11 @@ class ImageProcessingApp(QMainWindow):
 
     def display_image(self, img, label):
         try:
-            if len(img.shape) == 2:  # Grayscale image
+            if len(img.shape) == 2: 
                 height, width = img.shape
                 bytes_per_line = width
                 q_img = QImage(img.data, width, height, bytes_per_line, QImage.Format_Grayscale8)
-            elif len(img.shape) == 3:  # Color image
+            elif len(img.shape) == 3: 
                 height, width, channel = img.shape
                 bytes_per_line = 3 * width
                 q_img = QImage(img.data, width, height, bytes_per_line, QImage.Format_RGB888).rgbSwapped()
@@ -117,10 +113,9 @@ class ImageProcessingApp(QMainWindow):
             return
 
         try:
-            # Всегда начинаем обработку с оригинального изображения
             img = self.original_image.copy()
             method = self.method_combo.currentText()
-            threshold = self.threshold_spinbox.value()  # Получаем значение порога из интерфейса
+            threshold = self.threshold_spinbox.value()  
 
             if method == "Global Thresholding":
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -130,10 +125,10 @@ class ImageProcessingApp(QMainWindow):
                 self.processed_image = cv2.adaptiveThreshold(
                     gray,
                     255,
-                    cv2.ADAPTIVE_THRESH_GAUSSIAN_C,  # Метод: взвешенное среднее
+                    cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
                     cv2.THRESH_BINARY,
-                    11,  # Размер локального окна
-                    threshold  # Смещение C: пользовательское значение из интерфейса
+                    11,  
+                    threshold  
                 )
             elif method == "Edge Detection":
                 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
